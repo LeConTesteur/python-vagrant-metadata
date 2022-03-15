@@ -3,6 +3,8 @@ Public function
 """
 import requests
 
+from requests.structures import CaseInsensitiveDict
+
 from .metadata import Metadata
 
 
@@ -10,8 +12,14 @@ def fetch(url: str) -> Metadata:
     """
     Download metadata json for url and create Metadata class
     """
-    response = requests.session().get(url)
-    return Metadata.from_json(response.content) # pylint: disable=E1101
+    headers = CaseInsensitiveDict()
+    headers['Accept'] = "application/json"
+    response = requests.get(url, headers=headers)
+    if not response.ok:
+        raise Exception(
+            f'Impossible to fetch {url} (status code: {response.status_code})')
+    return Metadata.from_json(response.content)  # pylint: disable=E1101
+
 
 def forge_metadata_url(box_name: str) -> str:
     """

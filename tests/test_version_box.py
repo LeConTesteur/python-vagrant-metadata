@@ -4,8 +4,8 @@ Test VersionBox and VersionBoxList class
 
 from unittest import TestCase, main as unittest_main
 
-from vagrant_metadata.provider import Provider, ProviderList
-from vagrant_metadata.version_box import VersionBox, VersionBoxList
+from vagrant_metadata.provider import Provider
+from vagrant_metadata.version_box import VersionBox
 
 
 class TestVagrantVersionBoxClass(TestCase):
@@ -27,12 +27,12 @@ class TestVagrantVersionBoxClass(TestCase):
 
     def test_version_provider(self):
         p = Provider("libvirt", "", "", "")
-        version = VersionBox('1.0.0', providers=ProviderList([
+        version = VersionBox('1.0.0', providers=[
             p,
             Provider("virtualbox", "", "", "")
-        ]))
+        ])
         self.assertEqual(version.provider('libvirt'), p)
-        self.assertEqual(version.providers.libvirt, p)
+        self.assertEqual(version['libvirt'], p)
 
     def test_version_compare_attribut_version(self):
         version = VersionBox('1.0.0')
@@ -45,14 +45,6 @@ class TestVagrantVersionBoxClass(TestCase):
         self.assertFalse(version < VersionBox('0.0.1'))
         self.assertFalse(version > VersionBox('1.0.1'))
         self.assertTrue(version == VersionBox('1.0.0'))
-
-
-class TestVagrantVersionBoxListClass(TestCase):
-
-    def test_version_getitem(self):
-        v = VersionBox('1.0.0')
-        versions = VersionBoxList([v])
-        self.assertEqual(versions['1.0.0'], v)
 
 
 if __name__ == '__main__':

@@ -1,12 +1,12 @@
 """
 Class model of metadata in metadata json file
 """
-from typing import Union
+from typing import Iterable, List, Union
 from dataclasses import dataclass, field
 from dataclasses_json import dataclass_json
 from packaging import version as packagingVersion
 
-from .version_box import VersionBox, VersionBoxList
+from .version_box import VersionBox
 
 
 @dataclass_json
@@ -18,19 +18,38 @@ class Metadata:
     name: str
     description: str = field(compare=False, default="")
     short_description: str = field(compare=False, default="")
-    versions: VersionBoxList = field(default_factory=VersionBoxList)
+    versions: List[VersionBox] = field(default_factory=list)
 
     def url_for(self, version: Union[str, packagingVersion.Version], provider: str) -> str:
         """
         Get the download url of box for the specific version and provider
         """
-        return self.versions[version].providers[provider].url
+        print(self[version])
+        return self[version][provider].url
 
     def url_for_youngest_version(self, provider: str) -> str:
         """
         Get the download url of box for the youngest version and the specific provider
         """
-        return self.versions.youngest().providers[provider].url
+        return self.youngest()[provider].url
 
     def __getitem__(self, version: Union[str, packagingVersion.Version]) -> VersionBox:
-        return self.versions[version]
+        """
+        Get the VersionBox by version
+        """
+        if isinstance(version, str):
+            version = packagingVersion.Version(version)
+        try:
+            return next(self._filter_version(version))
+        except StopIteration as exception:
+            raise IndexError(
+                f'No VersionBox with version: "{version}"') from exception
+
+    def _filter_version(self, version: packagingVersion.Version) -> Iterable:
+        return filter(lambda v: v.version == version, self.versions)
+
+    def youngest(self) -> VersionBox:
+        """
+        Get the youngest VersionBox
+        """
+        return sorted(self.versions, reverse=True)[0]

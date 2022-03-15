@@ -5,11 +5,11 @@ We have two classes in this file:
 - VersionBoxList
 """
 from dataclasses import dataclass, field
-from typing import Iterable, Union
+from typing import Iterable, List
 from dataclasses_json import dataclass_json
 from packaging import version as packagingVersion
 
-from .provider import Provider, ProviderList
+from .provider import Provider
 
 
 @dataclass_json
@@ -22,8 +22,7 @@ class VersionBox:
     status: str = field(compare=False, default="active")
     description_html: str = field(compare=False, default="")
     description_markdown: str = field(compare=False, default="")
-    providers: ProviderList = field(
-        default_factory=ProviderList, compare=False)
+    providers: List[Provider] = field(default_factory=list)
     _version: str = field(init=False, default='', compare=False)
 
     def have_provider(self, provider: str) -> bool:
@@ -37,7 +36,7 @@ class VersionBox:
         Get the provider by this name
         """
         try:
-            return self.providers[provider]
+            return self.__getitem__(provider)
         except IndexError:
             return None
 
@@ -58,30 +57,12 @@ class VersionBox:
         """
         self._version = packagingVersion.Version(version)
 
-
-class VersionBoxList:
-    """
-    List of VersionBox with utils methods
-    """
-    def __init__(self, data) -> None:
-        self.data = data
-
-    def __getitem__(self, version: Union[str, packagingVersion.Version]) -> VersionBox:
-        """
-        Get the VersionBox by version
-        """
-        if isinstance(version, str):
-            version = packagingVersion.Version(version)
+    def __getitem__(self, p: str) -> Provider:
         try:
-            return next(self._filter_version(version))
+            return next(self._filter_provider(p))
         except StopIteration as exception:
-            raise IndexError(f'No VersionBox with version: "{version}"') from exception
+            raise IndexError(
+                f'No ProviderList with name: "{p}"') from exception
 
-    def _filter_version(self, version: packagingVersion.Version) -> Iterable:
-        return filter(lambda v: v.version == version, self.data)
-
-    def youngest(self) -> VersionBox:
-        """
-        Get the youngest VersionBox
-        """
-        return sorted(self.data, reverse=True)[0]
+    def _filter_provider(self, provider: str) -> Iterable:
+        return filter(lambda p: p.name == provider, self.providers)

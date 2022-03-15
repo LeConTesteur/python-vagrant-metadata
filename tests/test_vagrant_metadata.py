@@ -6,7 +6,7 @@ import requests_mock
 
 from unittest import TestCase, main as unittest_main
 
-from vagrant_metadata.utils import fetch
+from vagrant_metadata import fetch
 
 
 class TestVagrantMetadata(TestCase):

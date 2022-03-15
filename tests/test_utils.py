@@ -2,7 +2,7 @@
 Test utils functions
 """
 from unittest import TestCase, main as unittest_main
-from vagrant_metadata.utils import forge_metadata_url
+from vagrant_metadata import forge_metadata_url
 
 
 class TestVagrantMetadataUtils(TestCase):

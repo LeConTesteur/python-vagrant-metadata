@@ -1,14 +1,10 @@
-import os
-import importlib
-import requests_mock
-import packaging
+"""
+Test Proviser and ProviderList Class
+"""
+from unittest import TestCase, main as unittest_main
 
+from vagrant_metadata.provider import Provider, ProviderList
 
-from unittest import TestCase, mock, main as unittest_main
-from packaging import version as packagingVersion
-
-from vagrant_metadata import VersionBox, Provider, Metadata
-from vagrant_metadata.provider import ProviderList
 
 class TestVagrantProviderListClass(TestCase):
 
@@ -23,8 +19,7 @@ class TestVagrantProviderListClass(TestCase):
         self.assertEqual(list['libvirt'], libvirt)
         self.assertEqual(list.virtualbox, virtualbox)
         with self.assertRaises(AttributeError):
-          list.hyperv
-
+            list.hyperv
 
 
 if __name__ == '__main__':

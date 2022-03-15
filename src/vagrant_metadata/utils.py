@@ -1,23 +1,23 @@
+"""
+Public function
+"""
 import requests
-import json
 
-from packaging import version as packagingVersion
-from . import Metadata
+from .metadata import Metadata
 
 
 def fetch(url: str) -> Metadata:
-  r = requests.session().get(url)
-  return Metadata.from_json(r.content)
-
-
-def fetch_version(versions: dict, version: str) -> packagingVersion.Version:
-  if version is not None:
-    return packagingVersion.Version(version)
-  return sorted(
-      versions.keys(),
-      reverse=True)[0]
+    """
+    Download metadata json for url and create Metadata class
+    """
+    response = requests.session().get(url)
+    return Metadata.from_json(response.content) # pylint: disable=E1101
 
 def forge_metadata_url(box_name: str) -> str:
-  if not '/' in box_name:
-    raise Exception(f'box_name must contains "/" : {box_name}')
-  return 'https://app.vagrantup.com/{}/boxes/{}'.format(*box_name.split('/'))
+    """
+    Forge the metadata url from name
+    """
+    if not '/' in box_name:
+        raise Exception(f'box_name must contains "/" : {box_name}')
+    user, name, *_ = box_name.split('/', maxsplit=2)
+    return f'https://app.vagrantup.com/{user}/boxes/{name}'

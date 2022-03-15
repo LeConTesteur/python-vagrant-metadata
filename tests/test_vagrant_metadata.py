@@ -1,13 +1,13 @@
-import os
-import importlib
+"""
+Acceptance test
+"""
 import requests_mock
-import packaging
 
 
-from unittest import TestCase, mock, main as unittest_main
-from packaging import version as packagingVersion
+from unittest import TestCase, main as unittest_main
 
-from vagrant_metadata import fetch
+from vagrant_metadata.utils import fetch
+
 
 class TestVagrantMetadata(TestCase):
     @requests_mock.Mocker()

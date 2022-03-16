@@ -5,7 +5,7 @@ We have two classes in this file:
 - VersionBoxList
 """
 from dataclasses import dataclass, field
-from typing import Iterable, List
+from typing import Iterable, List, Optional
 from dataclasses_json import dataclass_json
 from packaging import version as packagingVersion
 
@@ -19,11 +19,11 @@ class VersionBox:
     Class model of version box in metadata json file
     """
     version: str = field(compare=True)
-    status: str = field(compare=False, default="active")
-    description_html: str = field(compare=False, default="")
-    description_markdown: str = field(compare=False, default="")
+    status: Optional[str] = field(compare=False, default="active")
+    description_html: Optional[str] = field(compare=False, default="")
+    description_markdown: Optional[str] = field(compare=False, default="")
     providers: List[Provider] = field(default_factory=list)
-    _version: str = field(init=False, default='', compare=False)
+    _version: Optional[str] = field(init=False, default='', compare=False)
 
     def have_provider(self, provider: str) -> bool:
         """
@@ -57,12 +57,12 @@ class VersionBox:
         """
         self._version = packagingVersion.Version(version)
 
-    def __getitem__(self, p: str) -> Provider:
+    def __getitem__(self, provider: str) -> Provider:
         try:
-            return next(self._filter_provider(p))
+            return next(self._filter_provider(provider))
         except StopIteration as exception:
             raise IndexError(
-                f'No ProviderList with name: "{p}"') from exception
+                f'No ProviderList with name: "{provider}"') from exception
 
     def _filter_provider(self, provider: str) -> Iterable:
         return filter(lambda p: p.name == provider, self.providers)

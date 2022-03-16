@@ -5,6 +5,7 @@ We have two classes in this file:
 - ProviderList
 """
 from dataclasses import dataclass, field
+from typing import Optional
 from dataclasses_json import dataclass_json
 
 
@@ -16,5 +17,5 @@ class Provider:
     """
     name: str
     url: str
-    checksum_type: str = field(default="")
-    checksum: str = field(default="")
+    checksum_type: Optional[str] = field(default="")
+    checksum: Optional[str] = field(default="")

@@ -1,7 +1,7 @@
 """
 Class model of metadata in metadata json file
 """
-from typing import Iterable, List, Union
+from typing import Iterable, List, Optional, Union
 from dataclasses import dataclass, field
 from dataclasses_json import dataclass_json
 from packaging import version as packagingVersion
@@ -16,15 +16,14 @@ class Metadata:
     Class model of metadata in metadata json file
     """
     name: str
-    description: str = field(compare=False, default="")
-    short_description: str = field(compare=False, default="")
+    description: Optional[str] = field(compare=False, default="")
+    short_description: Optional[str] = field(compare=False, default="")
     versions: List[VersionBox] = field(default_factory=list)
 
     def url_for(self, version: Union[str, packagingVersion.Version], provider: str) -> str:
         """
         Get the download url of box for the specific version and provider
         """
-        print(self[version])
         return self[version][provider].url
 
     def url_for_youngest_version(self, provider: str) -> str:

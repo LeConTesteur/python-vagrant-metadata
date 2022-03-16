@@ -1,1 +1,26 @@
 # python-vagrant-metadata
+
+python-vagrant-metadata is a library for download vagrant box in vagrant cloud or customs site.
+
+```python
+import requests
+from vagrant_metadata import fetch, forge_metadata_url
+
+metadata = fetch(forge_metadata_url('ubuntu/trusty64'))
+url = metadata.url_for_youngest_version('virtualbox')
+
+response = requests.get(url)
+if response.ok:
+  with open('mybox.box', 'wb') as f:
+    f.write(response.content)
+```
+
+If you need the checksum of box, you can use provider as like
+```python
+from vagrant_metadata import fetch, forge_metadata_url
+
+metadata = fetch(forge_metadata_url('ubuntu/trusty64'))
+provider = metadata.youngest()['virtualbox']
+print(provider.url)
+print(provider.checksum)
+```

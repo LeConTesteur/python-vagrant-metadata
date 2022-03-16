@@ -47,8 +47,22 @@ class Metadata:
     def _filter_version(self, version: packagingVersion.Version) -> Iterable:
         return filter(lambda v: v.version == version, self.versions)
 
+    def _filter_provider(self, provider: str) -> Iterable:
+        return filter(lambda v: v.have_provider(provider), self.versions)
+
     def youngest(self) -> VersionBox:
         """
         Get the youngest VersionBox
         """
         return sorted(self.versions, reverse=True)[0]
+
+    def keep_only_provider(self, provider: str):
+        """
+        Return Metadata instance with only version with provider
+        """
+        return Metadata(
+            self.name,
+            self.description,
+            self.short_description,
+            list(self._filter_provider(provider))
+        )

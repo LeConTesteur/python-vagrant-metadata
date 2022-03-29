@@ -21,7 +21,7 @@ extras = {
 
 setuptools.setup(
     name="python-vagrant-metadata",
-    version="0.0.1",
+    version="0.0.2",
     author="LeConTesteur",
     description="Can use and parse metadata information of vagrant box",
     long_description=long_description,
@@ -30,11 +30,7 @@ setuptools.setup(
     project_urls={
         "Bug Tracker": "https://github.com/LeConTesteur/python-vagrant-metadata/issues",
     },
-    classifiers=[
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: GNU GENERAL PUBLIC LICENSE",
-        "Operating System :: OS Independent",
-    ],
+    classifiers=[ "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"],
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
     python_requires=">=3.6",

@@ -60,3 +60,10 @@ print(provider.url)
 print(provider.checksum)
 ```
 
+# Build package
+
+```python
+python3 setup.py bdist_wheel
+python3 -m twine upload --skip-existing --repository testpypi dist/*
+python3 -m pip install --index-url https://test.pypi.org/simple/ python-vagrant-metadata
+```

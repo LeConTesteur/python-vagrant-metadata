@@ -21,7 +21,7 @@ extras = {
 
 setuptools.setup(
     name="python-vagrant-metadata",
-    version="0.0.2",
+    version="0.0.3",
     author="LeConTesteur",
     description="Can use and parse metadata information of vagrant box",
     long_description=long_description,

@@ -36,7 +36,7 @@ class VersionBox:
         Get the provider by this name
         """
         try:
-            return self.__getitem__(provider)
+            return self.__getitem__(provider) # pylint: disable=unnecessary-dunder-call
         except IndexError:
             return None
 

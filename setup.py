@@ -19,9 +19,11 @@ extras = {
     'tests': requirements_tests,
 }
 
+KEYWORDS = ('vagrant')
+
 setuptools.setup(
     name="python-vagrant-metadata",
-    version="0.0.4",
+    version="0.0.5",
     author="LeConTesteur",
     description="Can use and parse metadata information of vagrant box",
     long_description=long_description,
@@ -37,5 +39,5 @@ setuptools.setup(
     install_requires = requirements,
     tests_require = requirements_tests,
     extras_require = extras,
-
+    keywords=KEYWORDS,
 )
